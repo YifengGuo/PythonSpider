@@ -16,7 +16,7 @@ class UrlManager(object):
         to check if there is any new url which has not been crawled
         :return: true if there is some new url which has not been crawled
         '''
-        return self.new_url_size() != 0
+        return self.new_urls_size() != 0
 
 
     def get_new_url(self):
