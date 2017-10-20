@@ -1,4 +1,4 @@
-# coding: utf-8
+ # coding: utf-8
 """
 Url Manager for first spider
 UrlManager is to manage urls, maintain two sets, one is to store urls which has been crawled
