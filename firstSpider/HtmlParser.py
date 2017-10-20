@@ -1,19 +1,20 @@
 # coding: utf-8
 """
 Use BeautifulSoup4 to parse the HTML
-For this spider, we need to fetch current entry's url, title and abstract
+For this spider, we need to fetch current entry's url, title and summary
 By analysing the HTML, find out:
                     title: <dd class="lemmaWgt-lemmaTtile-title"><h1>XXX</h1></dd>
-                    abstract: <div class="lemma-summary" label-module="lemmaSummary">
+                    summary: <div class="lemma-summary" label-module="lemmaSummary">
                     url: the format is like <a target="_blank" href="/view/7833.htm">XXX</a>
                         so this is the format of relative url, we can use urlparse.urljoin() to
                         concatenate current website url and relative url to make it complete
 """
-import requests
+import urlparse
 import re
 from bs4 import BeautifulSoup
-class HtmlParser(object):
 
+
+class HtmlParser(object):
 
     def parser(self,page_url,html_cont):
         '''
@@ -29,10 +30,37 @@ class HtmlParser(object):
         new_data = self._get_new_data(page_url, soup)
         return new_urls, new_data
 
-
     def _get_new_urls(self,page_url,soup):
+        ''' 
+        set of complete urls of entries
+        :param page_url: current entry partial url
+        :param soup: soup
+        :return: set of urls which is complete after concatenation
         '''
-        :param page_url:
-        :param soup:
-        :return:
+        new_urls = set()
+        # fetch qualified links with <a>
+        links = soup.find_all('a', href=re.compile(r'/view/\d+\.htm'))
+        for link in links:
+            # fetch href property
+            partial_url = link.get('href')
+            # concatenate complete url
+            new_complete_url = urlparse.urljoin(page_url, partial_url)
+            new_urls.add(new_complete_url)
+        return new_urls
+
+    def _get_new_data(self, page_url, soup):
         '''
+        fetch data we need(title and summary of entry)
+        :param page_url: current entry url
+        :param soup: soup
+        :return: dict of data we need
+        '''
+        data = {}
+        data['url'] = page_url
+        title = soup.find('dd', class_='lemmaWgt-lemmaTtile-title').find('h1')
+        data['title'] = title.get_text()
+        summary = soup.find('div', class_='lemma-summary')
+        # .text == get_text() if no parameter need
+        data['summary'] = summary.get_text()
+        return data
+
