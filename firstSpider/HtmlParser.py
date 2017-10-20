@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup
 
 class HtmlParser(object):
 
-    def parser(self,page_url,html_cont):
+    def parser(self, page_url, html_cont):
         '''
         to parse html, fetch url and data we need
         :param page_url: download page urls (current website url, incomplete)
@@ -30,7 +30,7 @@ class HtmlParser(object):
         new_data = self._get_new_data(page_url, soup)
         return new_urls, new_data
 
-    def _get_new_urls(self,page_url,soup):
+    def _get_new_urls(self, page_url, soup):
         ''' 
         set of complete urls of entries
         :param page_url: current entry partial url
