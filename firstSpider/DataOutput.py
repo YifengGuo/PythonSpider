@@ -1,9 +1,12 @@
 import codecs
+
 """
 DataOutput is to generate web page view which shows
 all the entries' urls, titles and data we have crawled
 and parsed
 """
+
+
 class DataOutput(object):
     def __init__(self):
         self.datas = []
